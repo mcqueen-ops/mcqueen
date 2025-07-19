@@ -1,0 +1,224 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>Relâmpago McQueen ⚡</title>
+  <style>
+    body {
+      margin: 0;
+      font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Helvetica, Arial, sans-serif;
+      background-color: #0d1117;
+      color: #c9d1d9;
+      text-align: center;
+      overflow-x: hidden;
+      position: relative;
+    }
+
+    h1 {
+      font-size: 2.5rem;
+      margin-top: 2rem;
+      animation: zoomIn 1s ease-in-out forwards;
+      color: #58a6ff;
+    }
+
+    .container {
+      max-width: 800px;
+      margin: 2rem auto;
+      padding: 2rem;
+      background-color: #161b22;
+      border: 1px solid #30363d;
+      border-radius: 0.5rem;
+      box-shadow: 0 0 15px rgba(0,0,0,0.5);
+      text-align: left;
+    }
+
+    img {
+      width: 100%;
+      height: auto;
+      border-radius: 0.5rem;
+    }
+
+    .carousel {
+      position: relative;
+      overflow: hidden;
+      width: 100%;
+      margin-top: 1.5rem;
+    }
+
+    .slides {
+      display: flex;
+      transition: transform 0.5s ease-in-out;
+    }
+
+    .slide {
+      min-width: 100%;
+      transition: opacity 1s;
+    }
+
+    .carousel img {
+      width: 100%;
+      height: 400px;
+      object-fit: cover;
+      border-radius: 0.5rem;
+    }
+
+    .nav-btn {
+      position: absolute;
+      top: 50%;
+      transform: translateY(-50%);
+      background-color: rgba(0,0,0,0.5);
+      border: none;
+      color: #fff;
+      font-size: 2rem;
+      padding: 0.2rem 0.8rem;
+      cursor: pointer;
+      z-index: 1;
+    }
+
+    .prev {
+      left: 10px;
+    }
+    .next {
+      right: 10px;
+    }
+
+    p, .info {
+      font-size: 1.1rem;
+      line-height: 1.6;
+      margin: 1rem 0;
+    }
+
+    .extras {
+      margin-top: 2rem;
+      padding: 1rem;
+      background-color: #0d1117;
+      border-left: 4px solid #58a6ff;
+    }
+
+    button {
+      background-color: #238636;
+      color: white;
+      font-weight: bold;
+      font-size: 1rem;
+      border: none;
+      padding: 0.6rem 1.2rem;
+      border-radius: 0.3rem;
+      cursor: pointer;
+      transition: background-color 0.3s ease;
+      margin-top: 1.5rem;
+    }
+
+    button:hover {
+      background-color: #2ea043;
+    }
+
+    canvas {
+      position: fixed;
+      top: 0;
+      left: 0;
+      width: 100vw;
+      height: 100vh;
+      pointer-events: none;
+      z-index: 0;
+    }
+
+    @keyframes zoomIn {
+      from {
+        transform: scale(0);
+        opacity: 0;
+      }
+      to {
+        transform: scale(1);
+        opacity: 1;
+      }
+    }
+  </style>
+</head>
+<body>
+  <canvas id="fireworks"></canvas>
+  <h1>Relâmpago McQueen ⚡</h1>
+  <div class="container">
+    <img src="https://static.wikia.nocookie.net/pixar/images/b/b0/McQueenCars3.png" alt="Relâmpago McQueen" />
+
+    <p>“Eu sou a velocidade!” 🏁</p>
+    <div class="info">
+      <p>Hoje é um dia especial: aniversário do nosso grande amigo <strong>Lucas</strong>! 🎉</p>
+      <p>Parabéns, campeão! Que sua estrada seja sempre cheia de vitórias, como a do Relâmpago McQueen! 🏆</p>
+    </div>
+
+    <div class="extras">
+      <div class="carousel">
+        <button class="nav-btn prev" onclick="moveSlide(-1)">&#10094;</button>
+        <div class="slides" id="slides">
+          <div class="slide"><img src="https://i.imgur.com/1.jpg" alt="Slide 1"></div>
+          <div class="slide"><img src="https://i.imgur.com/2.jpg" alt="Slide 2"></div>
+          <div class="slide"><img src="https://i.imgur.com/3.jpg" alt="Slide 3"></div>
+          <div class="slide"><img src="https://i.imgur.com/4.jpg" alt="Slide 4"></div>
+          <div class="slide"><img src="https://i.imgur.com/5.jpg" alt="Slide 5"></div>
+          <div class="slide"><img src="https://i.imgur.com/6.jpg" alt="Slide 6"></div>
+          <div class="slide"><img src="https://i.imgur.com/7.jpg" alt="Slide 7"></div>
+        </div>
+        <button class="nav-btn next" onclick="moveSlide(1)">&#10095;</button>
+      </div>
+    </div>
+
+    <button onclick="acelerar()">⚡ Acelerar!</button>
+  </div>
+
+  <script>
+    function acelerar() {
+      alert('VRUUUM! Feliz aniversário, Lucas! 🏎💨🎂');
+    }
+
+    const canvas = document.getElementById('fireworks');
+    const ctx = canvas.getContext('2d');
+    canvas.width = window.innerWidth;
+    canvas.height = window.innerHeight;
+
+    const particles = [];
+    function createParticle(x, y, color) {
+      return {
+        x, y,
+        radius: Math.random() * 3 + 1,
+        color,
+        speedX: (Math.random() - 0.5) * 8,
+        speedY: (Math.random() - 0.5) * 8,
+        life: 100
+      };
+    }
+    function createFirework() {
+      const x = Math.random() * canvas.width;
+      const y = Math.random() * canvas.height / 2;
+      const colors = ['#FFD700', '#FF4500', '#FFFFFF', '#00FFFF', '#FF69B4'];
+      for (let i = 0; i < 30; i++) {
+        particles.push(createParticle(x, y, colors[Math.floor(Math.random() * colors.length)]));
+      }
+    }
+    function animateFireworks() {
+      requestAnimationFrame(animateFireworks);
+      ctx.clearRect(0, 0, canvas.width, canvas.height);
+      particles.forEach((p, i) => {
+        p.x += p.speedX;
+        p.y += p.speedY;
+        p.life--;
+        ctx.beginPath();
+        ctx.arc(p.x, p.y, p.radius, 0, Math.PI * 2);
+        ctx.fillStyle = p.color;
+        ctx.fill();
+        if (p.life <= 0) particles.splice(i, 1);
+      });
+    }
+    setInterval(createFirework, 1000);
+    animateFireworks();
+
+    let currentIndex = 0;
+    const slides = document.getElementById('slides');
+    function moveSlide(step) {
+      const totalSlides = slides.children.length;
+      currentIndex = (currentIndex + step + totalSlides) % totalSlides;
+      slides.style.transform = `translateX(-${currentIndex * 100}%)`;
+    }
+  </script>
+</body>
+</html>
